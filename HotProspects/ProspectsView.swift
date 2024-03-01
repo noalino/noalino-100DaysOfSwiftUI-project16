@@ -17,6 +17,7 @@ struct ProspectsView: View {
     @Environment(\.modelContext) var modelContext
     @Query(sort: \Prospect.name) var prospects: [Prospect]
     @State private var isShowingScanner = false
+    @State private var selectedProspects = Set<Prospect>()
     let filter: FilterType
 
     var title: String {
@@ -33,7 +34,7 @@ struct ProspectsView: View {
 
     var body: some View {
         NavigationStack {
-            List(prospects) { prospect in
+            List(prospects, selection: $selectedProspects) { prospect in
                 VStack(alignment: .leading) {
                     Text(prospect.name)
                         .font(.headline)
@@ -58,11 +59,24 @@ struct ProspectsView: View {
                         .tint(.green)
                     }
                 }
+                .tag(prospect)
             }
             .navigationTitle(title)
             .toolbar {
-                Button("Scan", systemImage: "qrcode.viewfinder") {
-                    isShowingScanner = true
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Scan", systemImage: "qrcode.viewfinder") {
+                        isShowingScanner = true
+                    }
+                }
+
+                ToolbarItem(placement: .topBarLeading) {
+                    EditButton()
+                }
+
+                if !selectedProspects.isEmpty {
+                    ToolbarItem(placement: .bottomBar) {
+                        Button("Delete", action: delete)
+                    }
                 }
             }
             .sheet(isPresented: $isShowingScanner) {
@@ -95,6 +109,12 @@ struct ProspectsView: View {
             modelContext.insert(person)
         case .failure(let error):
             print("Scanning failed: \(error.localizedDescription)")
+        }
+    }
+
+    func delete() {
+        for prospect in selectedProspects {
+            modelContext.delete(prospect)
         }
     }
 }
