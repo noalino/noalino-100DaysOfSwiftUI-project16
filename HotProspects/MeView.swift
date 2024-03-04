@@ -10,7 +10,7 @@ import SwiftUI
 
 struct MeView: View {
     @AppStorage("name") private var name = "Anonymous"
-    @AppStorage("name") private var emailAddress = "you@yoursite.com"
+    @AppStorage("emailAddress") private var emailAddress = "you@yoursite.com"
 
     let context = CIContext()
     let filter = CIFilter.qrCodeGenerator()
