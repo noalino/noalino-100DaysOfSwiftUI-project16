@@ -36,12 +36,20 @@ struct ProspectsView: View {
     var body: some View {
         NavigationStack {
             List(prospects, selection: $selectedProspects) { prospect in
-                VStack(alignment: .leading) {
-                    Text(prospect.name)
-                        .font(.headline)
+                HStack {
+                    VStack(alignment: .leading) {
+                        Text(prospect.name)
+                            .font(.headline)
 
-                    Text(prospect.emailAddress)
-                        .foregroundStyle(.secondary)
+                        Text(prospect.emailAddress)
+                            .foregroundStyle(.secondary)
+                    }
+
+                    Spacer()
+
+                    if filter == .none && prospect.isContacted {
+                        Image(systemName: "person.crop.circle.badge.checkmark")
+                    }
                 }
                 .swipeActions {
                     Button("Delete", systemImage: "trash", role: .destructive) {
