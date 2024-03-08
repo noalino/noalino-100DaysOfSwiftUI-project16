@@ -21,5 +21,5 @@ struct EditProspectView: View {
 }
 
 #Preview {
-    EditProspectView(prospect: Prospect(name: "John Doe", emailAddress: "johndoe@test.com", isContacted: false))
+    EditProspectView(prospect: Prospect(name: "John Doe", emailAddress: "johndoe@test.com", isContacted: false, createdAt: .now))
 }
